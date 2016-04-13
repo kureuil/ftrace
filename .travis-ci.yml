@@ -1,8 +1,0 @@
-sudo: required
-dist: trusty
-language: c
-compiler:
-  - clang
-  - gcc
-script:
-  - make re
