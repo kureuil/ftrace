@@ -5,7 +5,7 @@
 ** Login   <kureuil@epitech.net>
 ** 
 ** Started on  Tue Apr 12 09:42:43 2016 Arch Kureuil
-** Last update Wed Apr 13 10:43:42 2016 Arch Kureuil
+** Last update Thu Apr 14 09:33:04 2016 Arch Kureuil
 */
 
 #include <sys/ptrace.h>
@@ -75,7 +75,7 @@ ftrace(const struct s_ftrace_opts *opts)
 	return (-1);
       if (!handler_get(curinst, &handler))
 	{
-	  status = handler.callback(&regs, opts);
+	  status = handler.callback(curinst, &regs, opts);
 	  if (status)
 	    return (status < 0 ? -1 : 0);
 	}

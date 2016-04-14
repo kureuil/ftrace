@@ -5,7 +5,7 @@
 ** Login   <kureuil@epitech.net>
 ** 
 ** Started on  Mon Apr 11 10:03:45 2016 Arch Kureuil
-** Last update Wed Apr 13 10:46:04 2016 Arch Kureuil
+** Last update Thu Apr 14 09:49:28 2016 Arch Kureuil
 */
 
 #ifndef FTRACE_H_
@@ -24,11 +24,11 @@
 # define FTRACE_SYSCALL_INSTRUCTION	(0x50full)
 # define FTRACE_SYSCALL_ARGS_MAX	6
 
-# define FTRACE_CALLQ_BITMASK		(0xff00000000ull)
-# define FTRACE_CALLQ_INSTRUCTION	(0x8e00000000ull)
+# define FTRACE_CALLQ_BITMASK		(0xffull)
+# define FTRACE_CALLQ_INSTRUCTION	(0xe8ull)
 
 # define FTRACE_RETQ_BITMASK		(0xffull)
-# define FTRACE_RETQ_INSTRUCTION	(0x3cull)
+# define FTRACE_RETQ_INSTRUCTION	(0xc3ull)
 
 /*
 ** Types of event:
@@ -110,12 +110,14 @@ struct s_ftrace_opts
 /*
 ** Handle an instruction type.
 **
+** @param instruction The instruction that triggered the handler
 ** @param regs The registers of the tracee
 ** @param opts The options given to ftrace
 ** @return 0 in case of success, -1 in case of error,
 ** any positive value if the tracee exited.
 */
-typedef int (*t_handler)(const struct user_regs_struct *regs,
+typedef int (*t_handler)(unsigned long long int instruction,
+			 const struct user_regs_struct *regs,
 			 const struct s_ftrace_opts *opts);
 
 /*
@@ -258,7 +260,8 @@ ftrace_registers_get_by_idx(const struct user_regs_struct *regs,
 ** @see t_handler
 */
 int
-ftrace_handler_syscall(const struct user_regs_struct *regs,
+ftrace_handler_syscall(unsigned long long int instruction,
+		       const struct user_regs_struct *regs,
 		       const struct s_ftrace_opts *opts);
 
 /*
@@ -267,7 +270,8 @@ ftrace_handler_syscall(const struct user_regs_struct *regs,
 ** @see t_handler
 */
 int
-ftrace_handler_callq(const struct user_regs_struct *regs,
+ftrace_handler_callq(unsigned long long int instruction,
+		     const struct user_regs_struct *regs,
 		     const struct s_ftrace_opts *opts);
 
 /*
@@ -276,7 +280,8 @@ ftrace_handler_callq(const struct user_regs_struct *regs,
 ** @see t_handler
 */
 int
-ftrace_handler_retq(const struct user_regs_struct *regs,
+ftrace_handler_retq(unsigned long long int instruction,
+		    const struct user_regs_struct *regs,
 		    const struct s_ftrace_opts *opts);
 
 /*

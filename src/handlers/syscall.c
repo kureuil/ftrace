@@ -5,7 +5,7 @@
 ** Login   <kureuil@epitech.net>
 ** 
 ** Started on  Tue Apr 12 11:47:22 2016 Arch Kureuil
-** Last update Wed Apr 13 10:08:22 2016 Arch Kureuil
+** Last update Thu Apr 14 09:37:48 2016 Arch Kureuil
 */
 
 #include <sys/ptrace.h>
@@ -87,6 +87,8 @@ ftrace_syscall_print_call(const struct s_syscall *scall,
   i = 0;
   while (i < scall->argc)
     {
+      if (i != 0)
+	fprintf(opts->output, ", ");
       value = ftrace_registers_get_by_idx(regs, i);
       if (opts->prettify)
 	{
@@ -133,7 +135,8 @@ ftrace_syscall_print_return(const struct s_syscall *scall,
 }
 
 int
-ftrace_handler_syscall(const struct user_regs_struct *regs,
+ftrace_handler_syscall(unsigned long long int instruction,
+		       const struct user_regs_struct *regs,
 		       const struct s_ftrace_opts *opts)
 {
   int				status;
@@ -142,6 +145,7 @@ ftrace_handler_syscall(const struct user_regs_struct *regs,
 
   assert(regs != NULL);
   assert(opts != NULL);
+  (void) instruction;
   if (ftrace_syscall_get_by_id(regs->rax, &scall))
     return (0);
   ftrace_syscall_print_call(&scall, regs, opts);
