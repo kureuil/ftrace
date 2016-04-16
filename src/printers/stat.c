@@ -5,7 +5,7 @@
 ** Login   <kureuil@epitech.net>
 ** 
 ** Started on  Sun Apr 10 17:32:36 2016 Arch Kureuil
-** Last update Wed Apr 13 10:09:41 2016 Arch Kureuil
+** Last update Sat Apr 16 22:20:27 2016 Arch Kureuil
 */
 
 #define _GNU_SOURCE
@@ -55,12 +55,12 @@ ftrace_print_stat_struct(unsigned long long int addr,
   printed = 0;
   if (ftrace_peek_buffer(child, addr, sizeof(stat_data), &stat_data))
     return (0);
-  printed = fprintf(opts->output, "{st_mode=");
+  printed = fprintf(stderr, "{st_mode=");
   printed += ftrace_print_flags(stat_data.st_mode,
 				ARRAYSIZE(g_stat_flags),
 				g_stat_flags,
 				opts);
-  printed += fprintf(opts->output, "|%u, st_size=%lu, ...}",
+  printed += fprintf(stderr, "|%u, st_size=%lu, ...}",
 		     stat_data.st_mode, stat_data.st_size);
   return (printed);
 }

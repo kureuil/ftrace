@@ -5,7 +5,7 @@
 ** Login   <kureuil@epitech.net>
 ** 
 ** Started on  Mon Apr 11 10:03:45 2016 Arch Kureuil
-** Last update Sat Apr 16 21:52:33 2016 Arch Kureuil
+** Last update Sat Apr 16 22:16:46 2016 Arch Kureuil
 */
 
 #ifndef FTRACE_H_
@@ -70,8 +70,6 @@ struct s_flag
 ** @member pid The PID of the traced process
 ** @member command The array given to execve (if any)
 ** @member prettify Guess arguments type and rettify them
-** @member output The FILE where the output is written
-** @member output_type The tpe of the output stream (see enum e_output_type)
 ** @member timestamp_type The type of timestamp dsplayed before any output
 ** (see enum e_timestamp_type)
 */
@@ -80,8 +78,6 @@ struct s_ftrace_opts
   pid_t			pid;
   char			**command;
   bool			prettify;
-  FILE			*output;
-  enum e_output_type	output_type;
   enum e_timestamp_type	timestamp_type;
 };
 

@@ -5,7 +5,7 @@
 ** Login   <kureuil@epitech.net>
 ** 
 ** Started on  Mon Apr 11 09:47:02 2016 Arch Kureuil
-** Last update Sat Apr 16 20:13:31 2016 Arch Kureuil
+** Last update Sat Apr 16 22:16:20 2016 Arch Kureuil
 */
 
 #include <sys/ptrace.h>
@@ -24,8 +24,6 @@ opts_init(struct s_ftrace_opts *opts)
   opts->pid = 0;
   opts->command = NULL;
   opts->prettify = false;
-  opts->output = stderr;
-  opts->output_type = O_INNATE;
   opts->timestamp_type = TS_NONE;
 }
 
@@ -33,10 +31,6 @@ static void
 opts_destroy(struct s_ftrace_opts *opts)
 {
   free(opts->command);
-  if (opts->output_type == O_FILE)
-    fclose(opts->output);
-  else if (opts->output_type == O_COMMAND)
-    pclose(opts->output);
 }
 
 static int

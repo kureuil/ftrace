@@ -5,7 +5,7 @@
 ## Login   <person_l@epitech.net>
 ##
 ## Started on  Mon Feb 15 09:43:26 2016 Louis Person
-## Last update Sat Apr 16 22:08:36 2016 Arch Kureuil
+## Last update Sat Apr 16 22:15:28 2016 Arch Kureuil
 ##
 
 AR			= ar rc
@@ -183,7 +183,7 @@ fclean: clean
 
 %.o: %.c
 	@$(ECHO) $(COLORGREEN)"\t[CC] $< -> $@"$(COLORRESET)
-	$(CC) -c -o $@ $(CFLAGS) $<
+	@$(CC) -c -o $@ $(CFLAGS) $<
 
 re: fclean all
 

@@ -5,7 +5,7 @@
 ** Login   <kureuil@epitech.net>
 ** 
 ** Started on  Sun Apr 10 17:22:46 2016 Arch Kureuil
-** Last update Wed Apr 13 10:08:48 2016 Arch Kureuil
+** Last update Sat Apr 16 22:21:28 2016 Arch Kureuil
 */
 
 #include <sys/types.h>
@@ -21,7 +21,8 @@ ftrace_print_hexa(unsigned long long int value,
 {
   (void) child;
   (void) regs;
-  return (fprintf(opts->output, "0x%llx", value));
+  (void) opts;
+  return (fprintf(stderr, "0x%llx", value));
 }
 
 int
@@ -32,7 +33,8 @@ ftrace_print_integer(unsigned long long int value,
 {
   (void) child;
   (void) regs;
-  return (fprintf(opts->output, "%d", (int) value));
+  (void) opts;
+  return (fprintf(stderr, "%d", (int) value));
 }
 
 int
@@ -42,11 +44,12 @@ ftrace_print_pointer(unsigned long long int value,
 		     const struct s_ftrace_opts *opts)
 {
   (void) child;
+  (void) opts;
   (void) regs;
   if (value == 0)
-    return (fprintf(opts->output, "NULL"));
+    return (fprintf(stderr, "NULL"));
   else
-    return (fprintf(opts->output, "%#llx", value));
+    return (fprintf(stderr, "%#llx", value));
 }
 
 int
@@ -56,8 +59,9 @@ ftrace_print_long(unsigned long long int value,
 		  const struct s_ftrace_opts *opts)
 {
   (void) child;
+  (void) opts;
   (void) regs;
-  return (fprintf(opts->output, "%ld", (long) value));
+  return (fprintf(stderr, "%ld", (long) value));
 }
 
 int
@@ -67,7 +71,8 @@ ftrace_print_ulong(unsigned long long int value,
 		   const struct s_ftrace_opts *opts)
 {
   (void) child;
+  (void) opts;
   (void) regs;
-  return (fprintf(opts->output, "%lu", (unsigned long) value));
+  return (fprintf(stderr, "%lu", (unsigned long) value));
 }
 

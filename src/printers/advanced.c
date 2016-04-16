@@ -5,7 +5,7 @@
 ** Login   <kureuil@epitech.net>
 ** 
 ** Started on  Sun Apr 10 17:24:59 2016 Arch Kureuil
-** Last update Wed Apr 13 10:09:16 2016 Arch Kureuil
+** Last update Sat Apr 16 22:21:12 2016 Arch Kureuil
 */
 
 #undef _GNU_SOURCE
@@ -29,6 +29,7 @@ ftrace_print_flags(unsigned long long int value,
   int		printed;
   long long int	cdb;
 
+  (void) opts;
   i = j = 0;
   printed = 0;
   cdb = (long long int) value;
@@ -37,8 +38,8 @@ ftrace_print_flags(unsigned long long int value,
       if ((cdb & flags[i].value) == flags[i].value)
 	{
 	  if (j > 0)
-	    printed += fprintf(opts->output, "|");
-	  printed += fprintf(opts->output, "%s", flags[i].name);
+	    printed += fprintf(stderr, "|");
+	  printed += fprintf(stderr, "%s", flags[i].name);
 	  j++;
 	}
       i++;
@@ -55,14 +56,15 @@ ftrace_print_string(unsigned long long int value,
   char	*str;
   int	ret;
 
+  (void) opts;
   (void) regs;
   if (value == 0)
-    return (fprintf(opts->output, "NULL"));
+    return (fprintf(stderr, "NULL"));
   else
     {
       str = NULL;
       ftrace_peek_string(child, value, &str);
-      ret = fprintf(opts->output, "\"%s\"", str);
+      ret = fprintf(stderr, "\"%s\"", str);
       free(str);
       return (ret);
     }
@@ -77,6 +79,7 @@ ftrace_print_errno(unsigned long long int value,
   int	errnum;
   char	msg[128];
 
+  (void) opts;
   (void) child;
   (void) regs;
   errnum = (int) value;
@@ -86,7 +89,7 @@ ftrace_print_errno(unsigned long long int value,
   memset(msg, 0, sizeof(msg));
   if (strerror_r(errnum, msg, sizeof(msg) - 1))
     return (0);
-  return (fprintf(opts->output, " %s", msg));
+  return (fprintf(stderr, " %s", msg));
 }
 
 int
@@ -97,7 +100,8 @@ ftrace_print_size_t(unsigned long long int value,
 {
   (void) child;
   (void) regs;
-  return (fprintf(opts->output, "%zu", (size_t) value));
+  (void) opts;
+  return (fprintf(stderr, "%zu", (size_t) value));
 }
 
 int
@@ -107,6 +111,7 @@ ftrace_print_ssize_t(unsigned long long int value,
 		     const struct s_ftrace_opts *opts)
 {
   (void) child;
+  (void) opts;
   (void) regs;
-  return (fprintf(opts->output, "%zu", (ssize_t) value));
+  return (fprintf(stderr, "%zu", (ssize_t) value));
 }

@@ -5,7 +5,7 @@
 ## Login   <person_l@epitech.net>
 ##
 ## Started on  Tue Mar 01 19:25:03 2016 Louis Person
-## Last update Sat Apr 16 19:55:05 2016 Arch Kureuil
+## Last update Sat Apr 16 22:17:52 2016 Arch Kureuil
 ##
 
 NAME	= ftrace
@@ -15,8 +15,6 @@ SRCS	= \
 	src/optparser.c \
 	src/optparsers/pid.c \
 	src/optparsers/prettify.c \
-	src/optparsers/file.c \
-	src/optparsers/timestamp.c \
 	src/ftrace.c \
 	src/event.c \
 	src/peek.c \

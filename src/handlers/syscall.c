@@ -5,7 +5,7 @@
 ** Login   <kureuil@epitech.net>
 ** 
 ** Started on  Tue Apr 12 11:47:22 2016 Arch Kureuil
-** Last update Thu Apr 14 09:37:48 2016 Arch Kureuil
+** Last update Sat Apr 16 22:19:13 2016 Arch Kureuil
 */
 
 #include <sys/ptrace.h>
@@ -60,17 +60,17 @@ ftrace_syscall_print_call_prelude(const struct s_syscall *scall,
     {
       curtime = time(NULL);
       tm = localtime(&curtime);
-      printed += fprintf(opts->output, "%02d:%02d:%02d",
+      printed += fprintf(stderr, "%02d:%02d:%02d",
 			 tm->tm_hour, tm->tm_min, tm->tm_sec);
       if (opts->timestamp_type == TS_MILLISECOND)
 	{
 	  if (!gettimeofday(&timeval, NULL))
-	    printed += fprintf(opts->output, ".%06lu",
+	    printed += fprintf(stderr, ".%06lu",
 			       timeval.tv_usec % 1000000);
 	}
-      printed += fprintf(opts->output, " ");
+      printed += fprintf(stderr, " ");
     }
-  printed += fprintf(opts->output, "%s(", scall->name);
+  printed += fprintf(stderr, "%s(", scall->name);
   return (printed);
 }
 
@@ -88,7 +88,7 @@ ftrace_syscall_print_call(const struct s_syscall *scall,
   while (i < scall->argc)
     {
       if (i != 0)
-	fprintf(opts->output, ", ");
+	fprintf(stderr, ", ");
       value = ftrace_registers_get_by_idx(regs, i);
       if (opts->prettify)
 	{
@@ -115,7 +115,7 @@ ftrace_syscall_print_return(const struct s_syscall *scall,
 
   if (!scall->noreturn)
     {
-      fprintf(opts->output, ") = ");
+      fprintf(stderr, ") = ");
       if (opts->prettify)
 	{
 	  filtered = ((long long) regs->rax < 0) ?
@@ -125,11 +125,11 @@ ftrace_syscall_print_return(const struct s_syscall *scall,
 	}
       else
 	ftrace_print_hexa(regs->rax, opts->pid, regs, opts);
-      fprintf(opts->output, "\n");
+      fprintf(stderr, "\n");
     }
   else
     {
-      fprintf(opts->output, ") = ?\n");
+      fprintf(stderr, ") = ?\n");
     }
   return (0);
 }
@@ -160,7 +160,7 @@ ftrace_handler_syscall(unsigned long long int instruction,
   ftrace_syscall_print_return(&scall, &registers, opts);
   if (!WIFSTOPPED(status))
     {
-      fprintf(opts->output, "+++ exited with %d +++\n", WEXITSTATUS(status));
+      fprintf(stderr, "+++ exited with %d +++\n", WEXITSTATUS(status));
       return (1);
     }
   return (0);
