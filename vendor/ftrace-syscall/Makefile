@@ -5,7 +5,7 @@
 ## Login   <person_l@epitech.net>
 ##
 ## Started on  Mon Feb 15 09:43:26 2016 Louis Person
-## Last update Sat Apr 16 18:44:47 2016 Arch Kureuil
+## Last update Sat Apr 16 20:53:55 2016 Arch Kureuil
 ##
 
 AR			= ar rc
@@ -103,9 +103,10 @@ release: all
 debug: all
 
 ifeq ($(TYPE),"bin")
-$(NAME): $(LIBS) $(OBJS)
+$(NAME): $(ADDINS) $(LIBS) $(OBJS)
 	@$(ECHO) $(COLORTEAL)"\t[AR] Merging libraries"$(COLORRESET)
 	@$(RM) lib/libmerged.a
+	@touch lib/libmerge.a
 	@ar rcT lib/libmerged.a $(LIBS)
 	@$(ECHO) $(COLORTEAL)"\t[LD] $@"$(COLORRESET)
 	@$(CC) -o $(NAME) $(OBJS) $(LDFLAGS)
@@ -113,6 +114,7 @@ else ifeq ($(TYPE),"addin")
 $(NAME): $(DEPS) $(LIBS) $(OBJS)
 	@$(ECHO) $(COLORTEAL)"\t[AR] Merging libraries"$(COLORRESET)
 	@$(RM) lib/libmerged.a
+	@touch lib/libmerge.a
 	@ar rcT lib/libmerged.a $(LIBS)
 	@$(ECHO) $(COLORTEAL)"\t[LD] $@"$(COLORRESET)
 	@$(CC) -o $(NAME) $(OBJS) $(LDFLAGS)
