@@ -5,7 +5,7 @@
 ** Login   <kureuil@epitech.net>
 ** 
 ** Started on  Tue Apr 12 11:47:22 2016 Arch Kureuil
-** Last update Sat Apr 16 22:19:13 2016 Arch Kureuil
+** Last update Sat Apr 16 22:36:20 2016 Arch Kureuil
 */
 
 #include <sys/ptrace.h>
@@ -47,43 +47,15 @@ ftrace_syscall_get_by_id(unsigned long long id, struct s_syscall *scallp)
 }
 
 static int
-ftrace_syscall_print_call_prelude(const struct s_syscall *scall,
-				  const struct s_ftrace_opts *opts)
-{
-  int			printed;
-  struct tm		*tm;
-  time_t		curtime;
-  struct timeval	timeval;
-
-  printed = 0;
-  if (opts->timestamp_type != TS_NONE)
-    {
-      curtime = time(NULL);
-      tm = localtime(&curtime);
-      printed += fprintf(stderr, "%02d:%02d:%02d",
-			 tm->tm_hour, tm->tm_min, tm->tm_sec);
-      if (opts->timestamp_type == TS_MILLISECOND)
-	{
-	  if (!gettimeofday(&timeval, NULL))
-	    printed += fprintf(stderr, ".%06lu",
-			       timeval.tv_usec % 1000000);
-	}
-      printed += fprintf(stderr, " ");
-    }
-  printed += fprintf(stderr, "%s(", scall->name);
-  return (printed);
-}
-
-static int
 ftrace_syscall_print_call(const struct s_syscall *scall,
 			  const struct user_regs_struct *regs,
 			  const struct s_ftrace_opts *opts)
 {
   size_t			i;
   unsigned long long int	value;
-  int				printed;
 
-  printed = ftrace_syscall_print_call_prelude(scall, opts);
+  ftrace_event_trigger("ftrace:printline-begin", NULL);
+  fprintf(stderr, "%s(", scall->name);
   i = 0;
   while (i < scall->argc)
     {
@@ -93,17 +65,16 @@ ftrace_syscall_print_call(const struct s_syscall *scall,
       if (opts->prettify)
 	{
 	  if (scall->args[i].custom)
-	    printed += scall->args[i].printer.callback(value, opts->pid,
-						       regs, opts);
+	    scall->args[i].printer.callback(value, opts->pid, regs, opts);
 	  else
-	    printed += g_printers[scall->args[i].printer.type](value, opts->pid,
-							       regs, opts);
+	    g_printers[scall->args[i].printer.type](value, opts->pid,
+						    regs, opts);
 	}
       else
-	printed += ftrace_print_hexa(value, opts->pid, regs, opts);
+	ftrace_print_hexa(value, opts->pid, regs, opts);
       i++;
     }
-  return (printed);
+  return (0);
 }
 
 static int

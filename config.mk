@@ -5,7 +5,7 @@
 ## Login   <person_l@epitech.net>
 ##
 ## Started on  Tue Mar 01 19:25:03 2016 Louis Person
-## Last update Sat Apr 16 22:17:52 2016 Arch Kureuil
+## Last update Sat Apr 16 22:38:29 2016 Arch Kureuil
 ##
 
 NAME	= ftrace
@@ -39,4 +39,5 @@ LIBS	= lib/libarray.a \
 	lib/libvector.a
 
 ADDINS	= plugins/libftrace-syscall.so \
-	plugins/libftrace-redirect.so
+	plugins/libftrace-redirect.so \
+	plugins/libftrace-timestamp.so

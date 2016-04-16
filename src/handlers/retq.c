@@ -5,7 +5,7 @@
 ** Login   <kureuil@epitech.net>
 ** 
 ** Started on  Wed Apr 13 10:44:26 2016 Arch Kureuil
-** Last update Sat Apr 16 22:22:25 2016 Arch Kureuil
+** Last update Sat Apr 16 22:41:37 2016 Arch Kureuil
 */
 
 #include <assert.h>
@@ -19,6 +19,7 @@ ftrace_handler_retq(unsigned long long int instruction,
 {
   assert(regs != NULL);
   assert(opts != NULL);
+  ftrace_event_trigger("ftrace:printline-begin", NULL);
   fprintf(stderr, "Retq %#llx\n", instruction);
   return (0);
 }

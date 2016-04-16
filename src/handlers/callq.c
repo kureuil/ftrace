@@ -5,7 +5,7 @@
 ** Login   <kureuil@epitech.net>
 ** 
 ** Started on  Wed Apr 13 10:35:21 2016 Arch Kureuil
-** Last update Sat Apr 16 22:21:57 2016 Arch Kureuil
+** Last update Sat Apr 16 22:41:29 2016 Arch Kureuil
 */
 
 #include <assert.h>
@@ -19,6 +19,7 @@ ftrace_handler_callq(unsigned long long int value,
 {
   assert(regs != NULL);
   assert(opts != NULL);
+  ftrace_event_trigger("ftrace:printline-begin", NULL);
   fprintf(stderr, "Callq %#llx\n", value);
   return (0);
 }

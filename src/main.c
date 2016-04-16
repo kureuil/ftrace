@@ -5,7 +5,7 @@
 ** Login   <kureuil@epitech.net>
 ** 
 ** Started on  Mon Apr 11 09:47:02 2016 Arch Kureuil
-** Last update Sat Apr 16 22:16:20 2016 Arch Kureuil
+** Last update Sat Apr 16 22:37:08 2016 Arch Kureuil
 */
 
 #include <sys/ptrace.h>
@@ -24,7 +24,6 @@ opts_init(struct s_ftrace_opts *opts)
   opts->pid = 0;
   opts->command = NULL;
   opts->prettify = false;
-  opts->timestamp_type = TS_NONE;
 }
 
 static void

@@ -5,7 +5,7 @@
 ** Login   <kureuil@epitech.net>
 ** 
 ** Started on  Mon Apr 11 10:03:45 2016 Arch Kureuil
-** Last update Sat Apr 16 22:16:46 2016 Arch Kureuil
+** Last update Sat Apr 16 22:26:02 2016 Arch Kureuil
 */
 
 #ifndef FTRACE_H_
@@ -39,20 +39,6 @@
 # define FTRACE_EVENT_MAX		(128ul)
 
 /*
-** Types of timestamp:
-**
-** * TS_NONE: No timestamp displayed
-** * TS_TIME: Timestamp including current hour, minute, and second
-** * TS_MILLISECOND: TS_TIME + current milliseconds
-*/
-enum e_timestamp_type
-  {
-    TS_NONE,
-    TS_TIME,
-    TS_MILLISECOND
-  };
-
-/*
 ** Represent the value of a bitmask flag.
 **
 ** @member name The name of the option
@@ -78,7 +64,6 @@ struct s_ftrace_opts
   pid_t			pid;
   char			**command;
   bool			prettify;
-  enum e_timestamp_type	timestamp_type;
 };
 
 /*
