@@ -5,13 +5,15 @@
 ** Login   <kureuil@epitech.net>
 ** 
 ** Started on  Sat Apr 16 13:14:41 2016 Arch Kureuil
-** Last update Sat Apr 16 20:43:06 2016 Arch Kureuil
+** Last update Sat Apr 16 21:57:57 2016 Arch Kureuil
 */
 
 #include <assert.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <stdio.h>
 #include "error/error.h"
+#include "ftrace-redirect.h"
 #include "ftrace.h"
 #include "optparser.h"
 

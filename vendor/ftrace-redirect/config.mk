@@ -5,12 +5,12 @@
 ## Login   <kureuil@epitech.net>
 ## 
 ## Started on  Sat Apr 16 12:49:58 2016 Arch Kureuil
-## Last update Sat Apr 16 19:52:23 2016 Arch Kureuil
+## Last update Sat Apr 16 21:56:29 2016 Arch Kureuil
 ##
 
 TYPE		= "addin"
 
-NAME		= libftrace-redirect.so
+ADDINNAME	= ftrace-redirect
 
 SRCS		= src/main.c
 

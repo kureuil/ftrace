@@ -5,7 +5,7 @@
 ** Login   <kureuil@epitech.net>
 ** 
 ** Started on  Mon Apr 11 11:37:51 2016 Arch Kureuil
-** Last update Sat Apr 16 20:35:40 2016 Arch Kureuil
+** Last update Sat Apr 16 21:47:49 2016 Arch Kureuil
 */
 
 #include <unistd.h>
@@ -122,7 +122,6 @@ optparser(int argc, char **argv, struct s_ftrace_opts *opts)
   flags = NULL;
   if (optparser_generate_flags(&flags))
     return (-1);
-  fprintf(stderr, "Flags: '%s'\n", flags);
   while ((c = getopt(argc, argv, flags)) != -1)
     {
       optparser_get_option(c, &opt);

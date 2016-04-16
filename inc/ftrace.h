@@ -5,7 +5,7 @@
 ** Login   <kureuil@epitech.net>
 ** 
 ** Started on  Mon Apr 11 10:03:45 2016 Arch Kureuil
-** Last update Sat Apr 16 17:45:34 2016 Arch Kureuil
+** Last update Sat Apr 16 21:52:33 2016 Arch Kureuil
 */
 
 #ifndef FTRACE_H_
@@ -37,20 +37,6 @@
 # define FTRACE_RETQ_INSTRUCTION	(0xc3ull)
 
 # define FTRACE_EVENT_MAX		(128ul)
-
-/*
-** Types of output:
-**
-** * O_INNATE: system stream, shouldn't be closed (e.g: stderr)
-** * O_FILE: fopen's file, should be closed at the end of the program
-** * O_COMMAND: popen's process, should be closed at the end of the program
-*/
-enum e_output_type
-  {
-    O_INNATE = 1,
-    O_FILE = 2,
-    O_COMMAND = 4
-  };
 
 /*
 ** Types of timestamp:
