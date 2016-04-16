@@ -5,30 +5,18 @@
 ** Login   <kureuil@epitech.net>
 ** 
 ** Started on  Mon Apr 11 09:47:02 2016 Arch Kureuil
-** Last update Tue Apr 12 09:47:44 2016 Arch Kureuil
+** Last update Sat Apr 16 20:13:31 2016 Arch Kureuil
 */
 
 #include <sys/ptrace.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <limits.h>
+#include <string.h>
 #include <stdio.h>
+#include "error/error.h"
 #include "ftrace.h"
 #include "optparser.h"
-
-static void
-usage(FILE *stream, const char *prgm)
-{
-  fprintf(stream, "\nUSAGE: %s [OPTIONS...] COMMAND [ARGS]\n\n", prgm);
-  fprintf(stream, "OPTIONS:\n");
-  fprintf(stream, "\t-s       Prettify output of syscalls\n");
-  fprintf(stream, "\t-p PID   Trace program with id = PID instead of launching"
-	  " COMMAND\n");
-  fprintf(stream, "\t-f FILE  Write ftrace output to FILE (default=stderr)\n");
-  fprintf(stream, "\t-t       Print a timestamp before every output. If twice"
-	  ", include milliseconds in timestamp.\n");
-  fprintf(stream, "\tCOMMAND  Program to execute & trace\n");
-  fprintf(stream, "\tARGS     Arguments given to the executed program\n");
-}
 
 static void
 opts_init(struct s_ftrace_opts *opts)
@@ -60,20 +48,20 @@ exec(struct s_ftrace_opts *opts)
     {
       pid = fork();
       if (pid == -1)
-	return (-1);
+	return (error_raise_errno(), -1);
       else if (pid == 0)
 	{
 	  if (ptrace(PTRACE_TRACEME, 0, 0, 0) == -1)
-	    return (-1);
+	    return (error_raise_errno(), -1);
 	  execvp(opts->command[0], opts->command);
-	  return (-1);
+	  return (error_raise_errno(), -1);
 	}
       opts->pid = pid;
     }
   else
     {
       if (ptrace(PTRACE_ATTACH, opts->pid, 0, 0) == -1)
-	return (-1);
+	return (error_raise_errno(), -1);
     }
   return (0);
 }
@@ -81,25 +69,28 @@ exec(struct s_ftrace_opts *opts)
 int
 main(int argc, char **argv)
 {
+  MANAGED(ftrace_addins_unload) struct s_array	plugins;
   MANAGED(opts_destroy) struct s_ftrace_opts	opts;
+  char						addinspath[PATH_MAX];
 
   opts_init(&opts);
+  memset(&plugins, 0, sizeof(plugins));
+  if (ftrace_addins_locate(addinspath, sizeof(addinspath)))
+    return (error_handle(argv[0]), EXIT_FAILURE);
+  if (ftrace_addins_load(addinspath, &plugins))
+    return (error_handle(argv[0]), EXIT_FAILURE);
+  ftrace_event_trigger("optparser:register", NULL);
   if (argc == 1 || optparser(argc, argv, &opts))
     {
-      usage(stderr, argv[0]);
+      optparser_print_usage(argv[0]);
       return (EXIT_FAILURE);
     }
   if (opts.pid == 0 && opts.command == NULL)
-    {
-      usage(stderr, argv[0]);
-      return (EXIT_FAILURE);
-    }
+    return (error_handle(argv[0]), EXIT_FAILURE);
   if (exec(&opts))
-    {
-      perror(argv[0]);
-      return (EXIT_FAILURE);
-    }
+    return (error_handle(argv[0]), EXIT_FAILURE);
+  ftrace_event_trigger("ftrace:trace-start", NULL);
   if (ftrace(&opts))
-    return (EXIT_FAILURE);
+    return (error_handle(argv[0]), EXIT_FAILURE);
   return (EXIT_SUCCESS);
 }

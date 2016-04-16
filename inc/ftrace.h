@@ -5,7 +5,7 @@
 ** Login   <kureuil@epitech.net>
 ** 
 ** Started on  Mon Apr 11 10:03:45 2016 Arch Kureuil
-** Last update Thu Apr 14 09:49:28 2016 Arch Kureuil
+** Last update Sat Apr 16 17:45:34 2016 Arch Kureuil
 */
 
 #ifndef FTRACE_H_
@@ -15,14 +15,20 @@
 # include <sys/user.h>
 # include <stdbool.h>
 # include <stdio.h>
+# include "array/array.h"
 
 # define MANAGED(dtor)			__attribute__((__cleanup__(dtor)))
 # define MAX(x, y)			((x) ^ (((x) ^ (y)) & -((x) < (y))))
 # define ARRAYSIZE(arr)			(sizeof(arr) / sizeof(arr[0]))
 
+# define FTRACE_ADDINS_PREFIX		("libftrace-")
+# define FTRACE_ADDINS_PREFIX_LENGTH	(strlen(FTRACE_ADDINS_PREFIX))
+# define FTRACE_ADDINS_SUFFIX		(".so")
+# define FTRACE_ADDINS_SUFFIX_LENGTH	(strlen(FTRACE_ADDINS_SUFFIX))
+
 # define FTRACE_SYSCALL_BITMASK		(0xffffull)
 # define FTRACE_SYSCALL_INSTRUCTION	(0x50full)
-# define FTRACE_SYSCALL_ARGS_MAX	6
+# define FTRACE_SYSCALL_ARGS_MAX	(6)
 
 # define FTRACE_CALLQ_BITMASK		(0xffull)
 # define FTRACE_CALLQ_INSTRUCTION	(0xe8ull)
@@ -30,21 +36,7 @@
 # define FTRACE_RETQ_BITMASK		(0xffull)
 # define FTRACE_RETQ_INSTRUCTION	(0xc3ull)
 
-/*
-** Types of event:
-**
-** * E_SYSTEM_CALL: syscall
-** * E_INTERNAL_CALL: function defined in binary
-** * E_EXTERNAL_CALL: function defined in dynamically loaded library
-** * E_SIGNAL: signal received by the tracee
-*/
-enum e_event
-  {
-    E_SYSTEM_CALL,
-    E_INTERNAL_CALL,
-    E_EXTERNAL_CALL,
-    E_SIGNAL,
-  };
+# define FTRACE_EVENT_MAX		(128ul)
 
 /*
 ** Types of output:
@@ -105,6 +97,18 @@ struct s_ftrace_opts
   FILE			*output;
   enum e_output_type	output_type;
   enum e_timestamp_type	timestamp_type;
+};
+
+/*
+** Reprensent a ftrace addin.
+**
+** @member path Path of the plugin shared object file
+** @member handle Handle obtained by dlopen'ing the path
+*/
+struct s_ftrace_addin
+{
+  char		*path;
+  void		*handle;
 };
 
 /*
@@ -199,6 +203,7 @@ struct s_ftrace_handler
   unsigned long long int	bitmask;
   unsigned long long int	instruction;
   t_handler			callback;
+  int				priority;
 };
 
 /*
@@ -210,6 +215,37 @@ struct s_ftrace_handler
 */
 int
 ftrace(const struct s_ftrace_opts *opts);
+
+int
+ftrace_addins_locate(char *buf, size_t bufsize);
+
+int
+ftrace_addins_load(const char *path, struct s_array *addins);
+
+int
+ftrace_addins_unload(struct s_array *addins);
+
+typedef void (*t_listener)(const char *name, void *data);
+
+/*
+** Trigger an event.
+**
+** @param name The name of the event
+** @param data The data given to the event listener
+** @return 0 in case of success, any other value otherwise
+*/
+int
+ftrace_event_trigger(const char *name, void *data);
+
+/*
+** Add a callback to an event
+**
+** @param name The name of the event
+** @param listener THe callback to call when the event is triggered.
+** @return 0 in case of success, any other value otherwise
+*/
+int
+ftrace_event_listen(const char *name, t_listener listener);
 
 /*
 ** Peek at tracee registers and store their valieu in regs.

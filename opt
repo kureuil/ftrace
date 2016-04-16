@@ -1,0 +1,4 @@
+	-s       Prettify output of syscalls
+	-p PID   Trace program with id = PID instead of launching COMMAND
+	-f FILE  Write ftrace output to FILE (default=stderr)
+	-t       Print a timestamp before every output. If twice, include milliseconds in timestamp.

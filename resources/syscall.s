@@ -5,23 +5,23 @@ section .data
 	len     equ $ - msg		;length of our dear string
 	
 section .text
+	extern syscallmemaybe
 	global _start:function
-	global syscallmemaybe:function
+	global syscallexit:function
 	
 _start:
 	push rbp
 	mov rbp, rsp
-	call syscallmemaybe
-	mov rax, 60
-	syscall
+	call syscallmemaybe wrt ..plt
+	call syscallexit
+	mov rsp, rbp
+	pop rbp
+	ret
 
-syscallmemaybe:
+syscallexit:
 	push rbp,
 	mov rbp,rsp
-	mov rax, 1
-	mov rdi, 1
-	mov rsi, msg
-	mov rdx, len
+	mov rax, 60
 	syscall
 	mov rsp, rbp
 	pop rbp

@@ -5,7 +5,7 @@
 ## Login   <person_l@epitech.net>
 ##
 ## Started on  Tue Mar 01 19:25:03 2016 Louis Person
-## Last update Wed Apr 13 10:38:59 2016 Arch Kureuil
+## Last update Sat Apr 16 19:55:05 2016 Arch Kureuil
 ##
 
 NAME	= ftrace
@@ -18,7 +18,9 @@ SRCS	= \
 	src/optparsers/file.c \
 	src/optparsers/timestamp.c \
 	src/ftrace.c \
+	src/event.c \
 	src/peek.c \
+	src/addins.c \
 	src/registers.c \
 	src/syscalls.c \
 	src/handlers/syscall.c \
@@ -32,4 +34,11 @@ SRCS	= \
 
 TSTSRCS =
 
-LIBS	= lib/libarray.a
+LDFLAGS	+= -rdynamic -l dl
+
+LIBS	= lib/libarray.a \
+	lib/liberror.a \
+	lib/libvector.a
+
+ADDINS	= plugins/libftrace-syscall.so \
+	plugins/libftrace-redirect.so
