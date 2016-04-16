@@ -5,7 +5,7 @@
 ** Login   <kureuil@epitech.net>
 ** 
 ** Started on  Mon Apr 11 11:37:51 2016 Arch Kureuil
-** Last update Sat Apr 16 21:47:49 2016 Arch Kureuil
+** Last update Sat Apr 16 22:47:23 2016 Arch Kureuil
 */
 
 #include <unistd.h>
@@ -115,7 +115,7 @@ int
 optparser(int argc, char **argv, struct s_ftrace_opts *opts)
 {
   char			*flags;
-  char			c; 
+  char			c;
   int			i;
   struct s_option	opt;
 
