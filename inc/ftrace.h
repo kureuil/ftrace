@@ -5,7 +5,7 @@
 ** Login   <kureuil@epitech.net>
 ** 
 ** Started on  Mon Apr 11 10:03:45 2016 Arch Kureuil
-** Last update Sun Apr 17 11:17:26 2016 Arch Kureuil
+** Last update Sun Apr 17 11:50:05 2016 Arch Kureuil
 */
 
 #ifndef FTRACE_H_
@@ -27,12 +27,6 @@
 # define FTRACE_ADDINS_SUFFIX_LENGTH	(strlen(FTRACE_ADDINS_SUFFIX))
 
 # define FTRACE_SYSCALL_ARGS_MAX	(6)
-
-# define FTRACE_CALLQ_BITMASK		(0xffull)
-# define FTRACE_CALLQ_INSTRUCTION	(0xe8ull)
-
-# define FTRACE_RETQ_BITMASK		(0xffull)
-# define FTRACE_RETQ_INSTRUCTION	(0xc3ull)
 
 # define FTRACE_EVENT_MAX		(128ul)
 
@@ -61,7 +55,6 @@ struct s_ftrace_opts
 {
   pid_t			pid;
   char			**command;
-  bool			prettify;
 };
 
 /*
@@ -218,26 +211,6 @@ ftrace_peek_buffer(pid_t child,
 unsigned long long int
 ftrace_registers_get_by_idx(const struct user_regs_struct *regs,
 			    size_t idx);
-
-/*
-** Handle a callq instruction.
-**
-** @see t_handler
-*/
-int
-ftrace_handler_callq(unsigned long long int instruction,
-		     const struct user_regs_struct *regs,
-		     const struct s_ftrace_opts *opts);
-
-/*
-** Handle a retq instruction.
-**
-** @see t_handler
-*/
-int
-ftrace_handler_retq(unsigned long long int instruction,
-		    const struct user_regs_struct *regs,
-		    const struct s_ftrace_opts *opts);
 
 /*
 ** Function printing flags found in a value.

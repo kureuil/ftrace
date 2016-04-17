@@ -5,7 +5,7 @@
 ** Login   <kureuil@epitech.net>
 ** 
 ** Started on  Mon Apr 11 11:34:43 2016 Arch Kureuil
-** Last update Sat Apr 16 20:13:49 2016 Arch Kureuil
+** Last update Sun Apr 17 11:34:12 2016 Arch Kureuil
 */
 
 #ifndef OPTPARSER_H_
@@ -31,13 +31,5 @@ int	optparser(int argc, char **av, struct s_ftrace_opts *opts);
 int	optparser_register(const struct s_option *option);
 
 void	optparser_print_usage(const char *prgm);
-
-int	ftrace_option_pid(const char *arg, struct s_ftrace_opts *opts);
-
-int	ftrace_option_prettify(const char *arg, struct s_ftrace_opts *opts);
-
-int	ftrace_option_file(const char *arg, struct s_ftrace_opts *opts);
-
-int	ftrace_option_timestamp(const char *arg, struct s_ftrace_opts *opts);
 
 #endif

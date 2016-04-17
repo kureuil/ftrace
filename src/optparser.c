@@ -5,7 +5,7 @@
 ** Login   <kureuil@epitech.net>
 ** 
 ** Started on  Mon Apr 11 11:37:51 2016 Arch Kureuil
-** Last update Sat Apr 16 22:47:23 2016 Arch Kureuil
+** Last update Sun Apr 17 11:46:06 2016 Arch Kureuil
 */
 
 #include <unistd.h>
@@ -128,15 +128,14 @@ optparser(int argc, char **argv, struct s_ftrace_opts *opts)
       if (opt.callback(optarg))
 	return (-1);
     }
+  if (opts->pid == 0 && (argc - optind) == 0)
+    return (-1);
   opts->command = calloc(argc - optind + 1, sizeof(char *));
   if (opts->command == NULL)
     return (-1);
-  i = 0;
-  while (optind + i < argc)
-    {
-      opts->command[i] = argv[optind + i];
-      i++;
-    }
+  i = -1;
+  while (optind + ++i < argc)
+    opts->command[i] = argv[optind + i];
   opts->command[i] = NULL;
   return (0);
 }
