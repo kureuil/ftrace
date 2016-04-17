@@ -5,21 +5,18 @@
 ** Login   <kureuil@epitech.net>
 ** 
 ** Started on  Tue Apr 12 09:42:43 2016 Arch Kureuil
-** Last update Thu Apr 14 09:33:04 2016 Arch Kureuil
+** Last update Sun Apr 17 11:17:29 2016 Arch Kureuil
 */
 
 #include <sys/ptrace.h>
 #include <sys/wait.h>
 #include <assert.h>
 #include <stdlib.h>
+#include "vector/vector.h"
 #include "ftrace.h"
 
+/*
 static const struct s_ftrace_handler g_handlers[] = {
-  {
-    .bitmask = FTRACE_SYSCALL_BITMASK,
-    .instruction = FTRACE_SYSCALL_INSTRUCTION,
-    .callback = &ftrace_handler_syscall,
-  },
   {
     .bitmask = FTRACE_CALLQ_BITMASK,
     .instruction = FTRACE_CALLQ_INSTRUCTION,
@@ -36,25 +33,44 @@ static const struct s_ftrace_handler g_handlers[] = {
     .callback = NULL,
   },
 };
+*/
+static struct s_vector g_handlers;
 
 static int
-handler_get(long instruction,
-	    struct s_ftrace_handler *handler)
+ftrace_handlers_dispatch(long instruction,
+			 struct user_regs_struct *regs,
+			 const struct s_ftrace_opts *opts)
 {
-  size_t	i;
+  size_t			i;
+  struct s_ftrace_handler	handler;
+  int				status;
 
-  assert(handler != NULL);
   i = 0;
-  while (g_handlers[i].callback != NULL)
+  while (i < g_handlers.size)
     {
-      if ((instruction & g_handlers[i].bitmask) == g_handlers[i].instruction)
+      if (vector_get(&g_handlers, i, &handler))
+	return (-1);
+      if ((instruction & handler.bitmask) == handler.instruction)
 	{
-	  *handler = g_handlers[i];
-	  return (0);
+	  status = handler.callback(instruction, regs, opts);
+	  if (status)
+	    return (status);
 	}
       i++;
     }
-  return (-1);
+  return (0);
+}
+
+int
+ftrace_handlers_register(const struct s_ftrace_handler *handler)
+{
+  assert(handler != NULL);
+  if (g_handlers.capacity == 0)
+    {
+      if (vector_init(&g_handlers, 16, sizeof(struct s_ftrace_handler)))
+	return (-1);
+    }
+  return (vector_push_back(&g_handlers, handler));
 }
 
 int
@@ -63,8 +79,8 @@ ftrace(const struct s_ftrace_opts *opts)
   int				status;
   struct user_regs_struct	regs;
   long				curinst;
-  struct s_ftrace_handler	handler;
 
+  ftrace_event_trigger("ftrace:handlers-register", NULL);
   if (waitpid(opts->pid, &status, 0) == -1)
     return (-1);
   while (WIFSTOPPED(status))
@@ -73,12 +89,9 @@ ftrace(const struct s_ftrace_opts *opts)
 	return (-1);
       if (ftrace_peek_instruction(opts->pid, &regs, &curinst))
 	return (-1);
-      if (!handler_get(curinst, &handler))
-	{
-	  status = handler.callback(curinst, &regs, opts);
-	  if (status)
-	    return (status < 0 ? -1 : 0);
-	}
+      status = ftrace_handlers_dispatch(curinst, &regs, opts);
+      if (status)
+	return (status < 0 ? -1 : 0);
       if (ptrace(PTRACE_SINGLESTEP, opts->pid, 0, 0) == -1)
 	return (-1);
       if (waitpid(opts->pid, &status, 0) == -1)

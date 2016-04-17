@@ -5,11 +5,12 @@
 ** Login   <vagrant@epitech.net>
 **
 ** Started on  Sat Apr  9 19:30:52 2016
-** Last update Tue Apr 12 12:19:12 2016 Arch Kureuil
+** Last update Sat Apr 16 23:39:59 2016 Arch Kureuil
 */
 
 #include <stdlib.h>
 #include "ftrace.h"
+#include "ftrace-syscall.h"
 
 struct s_syscall	g_syscalls[] = {
     {

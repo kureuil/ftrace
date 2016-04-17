@@ -5,7 +5,7 @@
 ** Login   <kureuil@epitech.net>
 ** 
 ** Started on  Mon Apr 11 10:03:45 2016 Arch Kureuil
-** Last update Sat Apr 16 22:26:02 2016 Arch Kureuil
+** Last update Sun Apr 17 11:17:26 2016 Arch Kureuil
 */
 
 #ifndef FTRACE_H_
@@ -26,8 +26,6 @@
 # define FTRACE_ADDINS_SUFFIX		(".so")
 # define FTRACE_ADDINS_SUFFIX_LENGTH	(strlen(FTRACE_ADDINS_SUFFIX))
 
-# define FTRACE_SYSCALL_BITMASK		(0xffffull)
-# define FTRACE_SYSCALL_INSTRUCTION	(0x50full)
 # define FTRACE_SYSCALL_ARGS_MAX	(6)
 
 # define FTRACE_CALLQ_BITMASK		(0xffull)
@@ -120,45 +118,6 @@ enum e_type
   };
 
 /*
-** Represent a System Call argument
-**
-** @member custom Use a custom function to print the value
-** @member printer Union containing either the type of the value, or the
-** function to call to print the value.
-*/
-struct s_syscall_arg
-{
-  bool	custom;
-  union
-  {
-    enum e_type	type;
-    t_printer	callback;
-  }	printer;
-};
-
-/*
-** Represent a System Call
-**
-** @member id The syscall id
-** @member name The syscall name
-** @member noreturn Does the syscall not return to the caller
-** @member retval Type of the return value
-** @member argc The number of arguments of the syscall
-** @member args The arguments description
-*/
-struct s_syscall
-{
-  unsigned long long	id;
-  const char		*name;
-  bool			noreturn;
-  enum e_type		retval;
-  size_t		argc;
-  struct s_syscall_arg	args[FTRACE_SYSCALL_ARGS_MAX];
-};
-
-extern struct s_syscall g_syscalls[];
-
-/*
 ** Store an instruction handler.
 **
 ** @member bitmask The bitmask used to identify the instruction type
@@ -182,6 +141,9 @@ struct s_ftrace_handler
 */
 int
 ftrace(const struct s_ftrace_opts *opts);
+
+int
+ftrace_handlers_register(const struct s_ftrace_handler *handler);
 
 int
 ftrace_addins_locate(char *buf, size_t bufsize);
@@ -256,16 +218,6 @@ ftrace_peek_buffer(pid_t child,
 unsigned long long int
 ftrace_registers_get_by_idx(const struct user_regs_struct *regs,
 			    size_t idx);
-
-/*
-** Handle a syscall instruction.
-**
-** @see t_handler
-*/
-int
-ftrace_handler_syscall(unsigned long long int instruction,
-		       const struct user_regs_struct *regs,
-		       const struct s_ftrace_opts *opts);
 
 /*
 ** Handle a callq instruction.
@@ -402,32 +354,5 @@ ftrace_print_ulong(unsigned long long int value,
 		   pid_t child,
 		   const struct user_regs_struct *regs,
 		   const struct s_ftrace_opts *opts);
-
-/*
-** Print flags given to open(2)
-*/
-int
-ftrace_print_flags_open(unsigned long long int value,
-			pid_t child,
-			const struct user_regs_struct *regs,
-			const struct s_ftrace_opts *opts);
-
-/*
-** Print flags given to stat(2)
-*/
-int
-ftrace_print_stat_struct(unsigned long long int value,
-			 pid_t child,
-			 const struct user_regs_struct *regs,
-			 const struct s_ftrace_opts *opts);
-
-/*
-** Print flages given to mmap(2)
-*/
-int
-ftrace_print_mmap_flags(unsigned long long int value,
-			pid_t child,
-			const struct user_regs_struct *regs,
-			const struct s_ftrace_opts *opts);
 
 #endif
