@@ -5,7 +5,7 @@
 ** Login   <vagrant@epitech.net>
 ** 
 ** Started on  Sun Apr 10 17:36:04 2016 
-** Last update Tue Apr 12 12:14:27 2016 Arch Kureuil
+** Last update Mon Apr 18 10:21:00 2016 Arch Kureuil
 */
 
 #define _GNU_SOURCE
@@ -24,7 +24,7 @@ static const struct s_flag g_mmap_flags[] = {
   { .value = PROT_NONE, .name = "PROT_NONE" },
   { .value = MAP_SHARED, .name = "MAP_SHARED" },
   { .value = MAP_PRIVATE, .name = "MAP_PRIVATE" }
-    };
+};
 
 int
 ftrace_print_mmap_flags(unsigned long long int value,
