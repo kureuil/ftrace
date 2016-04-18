@@ -5,7 +5,7 @@
 ** Login   <kureuil@epitech.net>
 ** 
 ** Started on  Mon Apr 11 09:47:02 2016 Arch Kureuil
-** Last update Mon Apr 18 11:53:11 2016 Arch Kureuil
+** Last update Mon Apr 18 12:09:06 2016 Arch Kureuil
 */
 
 #include <sys/ptrace.h>
@@ -75,7 +75,7 @@ exec(struct s_ftrace_opts *opts)
 	  if (ptrace(PTRACE_TRACEME, 0, 0, 0) == -1)
 	    return (error_raise_errno(), -1);
 	  execvp(opts->command[0], opts->command);
-	  return (error_raise_errno(), -1);
+	  return (error_raise_errno_ctx(opts->command[0]), -1);
 	}
       opts->pid = pid;
     }
