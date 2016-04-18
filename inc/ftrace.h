@@ -5,7 +5,7 @@
 ** Login   <kureuil@epitech.net>
 ** 
 ** Started on  Mon Apr 11 10:03:45 2016 Arch Kureuil
-** Last update Sun Apr 17 11:50:05 2016 Arch Kureuil
+** Last update Mon Apr 18 11:48:32 2016 Arch Kureuil
 */
 
 #ifndef FTRACE_H_
@@ -14,6 +14,7 @@
 # include <sys/types.h>
 # include <sys/user.h>
 # include <stdbool.h>
+# include <libelf.h>
 # include <stdio.h>
 # include "array/array.h"
 
@@ -47,14 +48,15 @@ struct s_flag
 **
 ** @member pid The PID of the traced process
 ** @member command The array given to execve (if any)
-** @member prettify Guess arguments type and rettify them
-** @member timestamp_type The type of timestamp dsplayed before any output
-** (see enum e_timestamp_type)
+** @member elf_fd The fd of the traced program executable
+** @member elf handle on the Elf program executable
 */
 struct s_ftrace_opts
 {
-  pid_t			pid;
-  char			**command;
+  pid_t	pid;
+  char	**command;
+  int	elf_fd;
+  Elf	*elf;
 };
 
 /*
@@ -123,6 +125,7 @@ struct s_ftrace_handler
   unsigned long long int	instruction;
   t_handler			callback;
   int				priority;
+  const char			*arch;
 };
 
 /*
@@ -135,18 +138,72 @@ struct s_ftrace_handler
 int
 ftrace(const struct s_ftrace_opts *opts);
 
+/*
+** Open the ELF file of the process whose ID is `pid'.
+**
+** @param pid The id of the to be opened process
+** @param opts The options given to ftrace
+** @return 0 in case of success, any other value otherwise
+*/
+int
+ftrace_elf_open(pid_t pid, struct s_ftrace_opts *opts);
+
+/*
+** Close the previously opened ELF file.
+**
+** @param opts The options given to ftrace
+** @return 0 in case of success, any other value otherwise
+*/
+int
+ftrace_elf_close(const struct s_ftrace_opts *opts);
+
+/*
+** Register an instruction handler.
+**
+** @param handler The handler to register.
+** @return 0 in case of success; any other value otherwise
+*/
 int
 ftrace_handlers_register(const struct s_ftrace_handler *handler);
 
+/*
+** Locate addins of the filesystem.
+** Will typically return the `plugins' folder that is sibling
+** to the executable of ftrace.
+**
+** @param buf The buffer in which the path will be stored
+** @param bufsize The size of the buffer
+** @return 0 in case of success, any other value otherwise
+*/
 int
 ftrace_addins_locate(char *buf, size_t bufsize);
 
+/*
+** Load the addins located in `path' & add them to addins.
+**
+** @param path The path where the addins are located
+** @param addins An uninitialized array where the addins will be stored
+** @return 0 in case of success, any other value otherwise
+*/
 int
 ftrace_addins_load(const char *path, struct s_array *addins);
 
+/*
+** Unload the addins stored in `addins'.
+**
+** @param addins The array containing the addins
+** @return 0 in case of success, any other value otherwise
+*/
 int
 ftrace_addins_unload(struct s_array *addins);
 
+/*
+** Typedef for the pub/sub system.
+** Represent a listener to an event.
+**
+** @param name The name of the triggered event
+** @param data The data given to the event handler
+*/
 typedef void (*t_listener)(const char *name, void *data);
 
 /*

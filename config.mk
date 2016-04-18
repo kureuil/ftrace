@@ -5,7 +5,7 @@
 ## Login   <person_l@epitech.net>
 ##
 ## Started on  Tue Mar 01 19:25:03 2016 Louis Person
-## Last update Sun Apr 17 11:58:05 2016 Arch Kureuil
+## Last update Mon Apr 18 11:52:57 2016 Arch Kureuil
 ##
 
 NAME	= ftrace
@@ -17,16 +17,17 @@ SRCS	= \
 	src/event.c \
 	src/peek.c \
 	src/addins.c \
+	src/elf.c \
 	src/registers.c \
 	src/printers/base.c \
 	src/printers/advanced.c \
 	src/printers/mmap.c \
 	src/printers/open.c \
-	src/printers/stat.c \
+	src/printers/stat.c
 
 TSTSRCS =
 
-LDFLAGS	+= -rdynamic -l dl
+LDFLAGS	+= -rdynamic -l dl -l elf
 
 LIBS	= lib/libarray.a \
 	lib/liberror.a \

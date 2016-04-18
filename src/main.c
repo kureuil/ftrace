@@ -5,7 +5,7 @@
 ** Login   <kureuil@epitech.net>
 ** 
 ** Started on  Mon Apr 11 09:47:02 2016 Arch Kureuil
-** Last update Sun Apr 17 11:35:45 2016 Arch Kureuil
+** Last update Mon Apr 18 11:53:11 2016 Arch Kureuil
 */
 
 #include <sys/ptrace.h>
@@ -28,6 +28,11 @@ static struct s_ftrace_opts g_ftrace_opts = {
 static void
 opts_destroy()
 {
+  if (ftrace_elf_close(&g_ftrace_opts))
+    {
+      error_handle("ftrace");
+      return ;
+    }
   free(g_ftrace_opts.command);
 }
 
@@ -79,6 +84,8 @@ exec(struct s_ftrace_opts *opts)
       if (ptrace(PTRACE_ATTACH, opts->pid, 0, 0) == -1)
 	return (error_raise_errno(), -1);
     }
+  if (ftrace_elf_open(opts->pid, opts))
+    return (-1);
   return (0);
 }
 
