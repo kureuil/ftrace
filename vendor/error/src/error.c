@@ -5,7 +5,7 @@
 ** Login   <kureuil@epitech.net>
 ** 
 ** Started on  Sat Apr 16 17:13:45 2016 Arch Kureuil
-** Last update Sat Apr 16 17:25:42 2016 Arch Kureuil
+** Last update Mon Apr 18 12:07:46 2016 Arch Kureuil
 */
 
 #include <stdlib.h>
@@ -58,7 +58,7 @@ error_raise_errno_ctx(const char *ctx)
 int
 error_handle(const char *prefix)
 {
-  if (g_ctx != NULL)
+  if (g_ctx == NULL)
     {
       if (fprintf(stderr, "%s: %s\n", prefix, g_error) == -1)
 	return (-1);
