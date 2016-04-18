@@ -4,5 +4,7 @@ language: c
 compiler:
   - clang
   - gcc
+install:
+  - sudo apt-get install libelf1 libelf-dev
 script:
   - make re
