@@ -5,7 +5,7 @@
 ## Login   <person_l@epitech.net>
 ##
 ## Started on  Mon Feb 15 09:43:26 2016 Louis Person
-## Last update Sat Apr 16 22:15:28 2016 Arch Kureuil
+## Last update Wed Apr 20 19:36:28 2016 Arch Kureuil
 ##
 
 AR			= ar rc
@@ -29,6 +29,8 @@ MKDIR			= mkdir -p
 PWD			= $(shell pwd)
 
 VENDOR			?= vendor/
+
+MAKEFLAGS		= --no-print-directory
 
 CFLAGS			+= -Wall
 CFLAGS			+= -Wextra
@@ -176,10 +178,10 @@ fclean: clean
 	@$(RM) $(ADDINS)
 
 %.a:
-	@INSTALLDIR=$(PWD) VENDOR=../ $(MAKE) -C $(VENDOR)/$(@F:lib%.a=%) all install
+	@INSTALLDIR=$(PWD) VENDOR=../ $(MAKE) $(MAKEFLAGS) -C $(VENDOR)/$(@F:lib%.a=%) all install
 
 %.so:
-	@INSTALLDIR=$(PWD) VENDOR=../ $(MAKE) -C $(VENDOR)/$(@F:lib%.so=%) all install
+	@INSTALLDIR=$(PWD) VENDOR=../ $(MAKE) $(MAKEFLAGS) -C $(VENDOR)/$(@F:lib%.so=%) all install
 
 %.o: %.c
 	@$(ECHO) $(COLORGREEN)"\t[CC] $< -> $@"$(COLORRESET)
