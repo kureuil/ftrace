@@ -5,7 +5,7 @@
 ** Login   <kureuil@epitech.net>
 ** 
 ** Started on  Mon Apr 18 11:00:07 2016 Arch Kureuil
-** Last update Mon Apr 18 11:54:48 2016 Arch Kureuil
+** Last update Thu Apr 21 12:53:57 2016 Arch Kureuil
 */
 
 #include <sys/types.h>
@@ -14,13 +14,14 @@
 #include <limits.h>
 #include <assert.h>
 #include <string.h>
+#include <stdlib.h>
 #include <fcntl.h>
 #include <elf.h>
 #include "error/error.h"
 #include "ftrace.h"
 
-static int
-ftrace_elf_get_executable_path(pid_t pid, char *buf, size_t bufsize)
+int
+ftrace_elf_get_pid_path(pid_t pid, char *buf, size_t bufsize)
 {
   char		path[32];
   ssize_t	linked;
@@ -35,26 +36,68 @@ ftrace_elf_get_executable_path(pid_t pid, char *buf, size_t bufsize)
   if (linked == -1)
     return (error_raise_errno(), -1);
   buf[linked] = '\0';
+  printf("Opening '%s' for (%d)\n", buf, pid);
   return (0);
 }
 
-int
-ftrace_elf_open(pid_t pid, struct s_ftrace_opts *opts)
+static char *
+safe_strncpy(char *dest, const char *src, size_t n)
 {
-  char	exepath[PATH_MAX];
+  size_t	i;
 
-  assert(pid != 0);
+  i = 0;
+  while (src[i] && i < (n -1))
+    {
+      dest[i] = src[i];
+      i++;
+    }
+  dest[i] = '\0';
+  return (dest);
+}
+
+int
+ftrace_elf_get_executable_path(const char *cmd, char *buf, size_t bufsize)
+{
+  char	*path;
+  char	*pentry;
+
+  assert(cmd != NULL);
+  assert(buf != NULL);
+  assert(bufsize != 0);
+  if (!access(cmd, X_OK))
+    {
+      safe_strncpy(buf, cmd, bufsize);
+      return (0);
+    }
+  path = getenv("PATH");
+  if (path == NULL || strlen(path) == 0)
+    return (error_raise_ctx("No such value in environment", "PATH"), -1);
+  pentry = strsep(&path, ":");
+  while (pentry != NULL)
+    {
+      safe_strncpy(buf, cmd, bufsize);
+      strncat(buf, "/", bufsize - strlen(cmd));
+      strncat(buf, cmd, bufsize - strlen(cmd) - 1);
+      if (!access(buf, X_OK))
+	return (0);
+      pentry = strsep(&path, ":");
+    }
+  return (-1);
+}
+
+int
+ftrace_elf_open(const char *path, struct s_ftrace_opts *opts)
+{
+  assert(path != NULL);
   assert(opts != NULL);
   if (elf_version(EV_CURRENT) == EV_NONE)
     return (error_raise(elf_errmsg(-1)), -1);
-  if (ftrace_elf_get_executable_path(pid, exepath, sizeof(exepath)))
-    return (-1);
-  opts->elf_fd = open(exepath, O_RDONLY);
+  opts->elf_fd = open(path, O_RDONLY);
   if (opts->elf_fd == -1)
     return (error_raise_errno(), -1);
   opts->elf = elf_begin(opts->elf_fd, ELF_C_READ, NULL);
   if (opts->elf == NULL)
-    return (error_raise_ctx(exepath, elf_errmsg(-1)), -1);
+    return (error_raise_ctx(elf_errmsg(-1), path), -1);
   return (0);
 }
 

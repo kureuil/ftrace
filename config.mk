@@ -5,7 +5,7 @@
 ## Login   <person_l@epitech.net>
 ##
 ## Started on  Tue Mar 01 19:25:03 2016 Louis Person
-## Last update Mon Apr 18 11:52:57 2016 Arch Kureuil
+## Last update Thu Apr 21 12:52:16 2016 Arch Kureuil
 ##
 
 NAME	= ftrace
@@ -18,6 +18,7 @@ SRCS	= \
 	src/peek.c \
 	src/addins.c \
 	src/elf.c \
+	src/exec.c \
 	src/registers.c \
 	src/printers/base.c \
 	src/printers/advanced.c \

@@ -5,7 +5,7 @@
 ** Login   <kureuil@epitech.net>
 ** 
 ** Started on  Mon Apr 11 10:03:45 2016 Arch Kureuil
-** Last update Mon Apr 18 11:48:32 2016 Arch Kureuil
+** Last update Thu Apr 21 12:49:41 2016 Arch Kureuil
 */
 
 #ifndef FTRACE_H_
@@ -20,6 +20,7 @@
 
 # define MANAGED(dtor)			__attribute__((__cleanup__(dtor)))
 # define MAX(x, y)			((x) ^ (((x) ^ (y)) & -((x) < (y))))
+# define MIN(x, y)			(y) ^ (((x) ^ (y)) & -((x) < (y)))
 # define ARRAYSIZE(arr)			(sizeof(arr) / sizeof(arr[0]))
 
 # define FTRACE_ADDINS_PREFIX		("libftrace-")
@@ -139,6 +140,21 @@ int
 ftrace(const struct s_ftrace_opts *opts);
 
 /*
+** Execute the traced program, or attach to it.
+**
+** @param opts The options given to ftrace
+** @return 0 in case of success, any other value otherwise
+*/
+int
+ftrace_exec(struct s_ftrace_opts *opts);
+
+int
+ftrace_elf_get_pid_path(pid_t pid, char *buf, size_t bufsize);
+
+int
+ftrace_elf_get_executable_path(const char *cmd, char *buf, size_t bufsize);
+
+/*
 ** Open the ELF file of the process whose ID is `pid'.
 **
 ** @param pid The id of the to be opened process
@@ -146,7 +162,7 @@ ftrace(const struct s_ftrace_opts *opts);
 ** @return 0 in case of success, any other value otherwise
 */
 int
-ftrace_elf_open(pid_t pid, struct s_ftrace_opts *opts);
+ftrace_elf_open(const char *path, struct s_ftrace_opts *opts);
 
 /*
 ** Close the previously opened ELF file.

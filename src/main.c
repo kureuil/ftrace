@@ -5,7 +5,7 @@
 ** Login   <kureuil@epitech.net>
 ** 
 ** Started on  Mon Apr 11 09:47:02 2016 Arch Kureuil
-** Last update Mon Apr 18 12:09:06 2016 Arch Kureuil
+** Last update Thu Apr 21 12:28:54 2016 Arch Kureuil
 */
 
 #include <sys/ptrace.h>
@@ -60,35 +60,6 @@ static const struct s_option g_ftrace_pid_option = {
   .help = "Trace process whose id is PID instead of launching COMMAND"
 };
 
-static int
-exec(struct s_ftrace_opts *opts)
-{
-  pid_t	pid;
-
-  if (opts->command != NULL)
-    {
-      pid = fork();
-      if (pid == -1)
-	return (error_raise_errno(), -1);
-      else if (pid == 0)
-	{
-	  if (ptrace(PTRACE_TRACEME, 0, 0, 0) == -1)
-	    return (error_raise_errno(), -1);
-	  execvp(opts->command[0], opts->command);
-	  return (error_raise_errno_ctx(opts->command[0]), -1);
-	}
-      opts->pid = pid;
-    }
-  else
-    {
-      if (ptrace(PTRACE_ATTACH, opts->pid, 0, 0) == -1)
-	return (error_raise_errno(), -1);
-    }
-  if (ftrace_elf_open(opts->pid, opts))
-    return (-1);
-  return (0);
-}
-
 int
 main(int argc, char **argv)
 {
@@ -110,7 +81,7 @@ main(int argc, char **argv)
     }
   if (g_ftrace_opts.pid == 0 && g_ftrace_opts.command == NULL)
     return (error_handle(argv[0]), EXIT_FAILURE);
-  if (exec(&g_ftrace_opts))
+  if (ftrace_exec(&g_ftrace_opts))
     return (error_handle(argv[0]), EXIT_FAILURE);
   ftrace_event_trigger("ftrace:trace-start", NULL);
   if (ftrace(&g_ftrace_opts))
