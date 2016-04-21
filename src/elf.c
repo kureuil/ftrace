@@ -5,7 +5,7 @@
 ** Login   <kureuil@epitech.net>
 ** 
 ** Started on  Mon Apr 18 11:00:07 2016 Arch Kureuil
-** Last update Thu Apr 21 12:53:57 2016 Arch Kureuil
+** Last update Thu Apr 21 14:55:50 2016 Arch Kureuil
 */
 
 #include <sys/types.h>
@@ -15,6 +15,7 @@
 #include <assert.h>
 #include <string.h>
 #include <stdlib.h>
+#include <errno.h>
 #include <fcntl.h>
 #include <elf.h>
 #include "error/error.h"
@@ -69,20 +70,20 @@ ftrace_elf_get_executable_path(const char *cmd, char *buf, size_t bufsize)
       safe_strncpy(buf, cmd, bufsize);
       return (0);
     }
+  else if (strchr(cmd, '/') != NULL)
+    return (error_raise_ctx(strerror(ENOENT), cmd), -1);
   path = getenv("PATH");
   if (path == NULL || strlen(path) == 0)
     return (error_raise_ctx("No such value in environment", "PATH"), -1);
-  pentry = strsep(&path, ":");
-  while (pentry != NULL)
+  while ((pentry = strsep(&path, ":")) != NULL)
     {
-      safe_strncpy(buf, cmd, bufsize);
-      strncat(buf, "/", bufsize - strlen(cmd));
-      strncat(buf, cmd, bufsize - strlen(cmd) - 1);
+      safe_strncpy(buf, pentry, bufsize);
+      strncat(buf, "/", bufsize - strlen(pentry));
+      strncat(buf, cmd, bufsize - strlen(pentry) - 1);
       if (!access(buf, X_OK))
 	return (0);
-      pentry = strsep(&path, ":");
     }
-  return (-1);
+  return (error_raise_ctx(strerror(ENOENT), cmd), -1);
 }
 
 int
