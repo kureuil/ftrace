@@ -5,12 +5,15 @@
 ** Login   <kureuil@epitech.net>
 ** 
 ** Started on  Sat Apr 16 22:25:17 2016 Arch Kureuil
-** Last update Sun Apr 17 11:58:44 2016 Arch Kureuil
+** Last update Mon Apr 25 16:53:50 2016 Arch Kureuil
 */
 
 #ifndef FTRACE_FUNCALL_H_
 # define FTRACE_FUNCALL_H_
 
+# include <libelf.h>
+# include <stdlib.h>
+# include <gelf.h>
 # include "ftrace.h"
 
 # define FTRACE_CALLQ_BITMASK		(0xffull)
@@ -18,6 +21,22 @@
 
 # define FTRACE_RETQ_BITMASK		(0xffull)
 # define FTRACE_RETQ_INSTRUCTION	(0xc3ull)
+
+# define FTRACE_SYMBOL_MAX_LENGTH	(256)
+
+struct s_ftrace_elf_section
+{
+  Elf_Scn	*section;
+  Elf_Data	*data;
+  GElf_Shdr	header;
+};
+
+struct s_ftrace_elf_symbol
+{
+  GElf_Sym	raw;
+  uintptr_t	address;
+  char		name[FTRACE_SYMBOL_MAX_LENGTH];
+};
 
 /*
 ** Handle a callq instruction.

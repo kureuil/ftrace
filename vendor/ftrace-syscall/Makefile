@@ -5,7 +5,7 @@
 ## Login   <person_l@epitech.net>
 ##
 ## Started on  Mon Feb 15 09:43:26 2016 Louis Person
-## Last update Wed Apr 20 19:36:28 2016 Arch Kureuil
+## Last update Mon Apr 25 15:43:38 2016 Arch Kureuil
 ##
 
 AR			= ar rc
@@ -78,6 +78,8 @@ endif
 
 ifeq ($(TYPE),"lib")
 NAME		?= lib$(LIBNAME).a
+
+CFLAGS		+= -fPIC
 endif
 ifeq ($(TYPE),"addin")
 NAME		?= lib$(ADDINNAME).so

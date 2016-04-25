@@ -5,7 +5,7 @@
 ** Login   <kureuil@epitech.net>
 ** 
 ** Started on  Sat Apr 16 17:09:29 2016 Arch Kureuil
-** Last update Sat Apr 16 17:24:08 2016 Arch Kureuil
+** Last update Mon Apr 25 17:39:36 2016 Arch Kureuil
 */
 
 #ifndef ERROR_H_
@@ -45,7 +45,7 @@ error_raise_errno(void);
 ** @return 0 in case of success, any other value otherwise
 */
 int
-errno_raise_errno_ctx(const char *ctx);
+error_raise_errno_ctx(const char *ctx);
 
 /*
 ** Print the last raised error message & print it on the standard error

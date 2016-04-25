@@ -5,7 +5,7 @@
 ## Login   <person_l@epitech.net>
 ##
 ## Started on  Tue Mar 01 19:25:03 2016 Louis Person
-## Last update Thu Apr 21 12:52:16 2016 Arch Kureuil
+## Last update Mon Apr 25 15:27:41 2016 Arch Kureuil
 ##
 
 NAME	= ftrace
@@ -28,7 +28,9 @@ SRCS	= \
 
 TSTSRCS =
 
-LDFLAGS	+= -rdynamic -l dl -l elf
+LDFLAGS	+= -rdynamic
+LDFLAGS	+= -l dl
+LDFLAGS	+= -l elf
 
 LIBS	= lib/libarray.a \
 	lib/liberror.a \

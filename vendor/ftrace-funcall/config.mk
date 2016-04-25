@@ -5,7 +5,7 @@
 ## Login   <kureuil@epitech.net>
 ## 
 ## Started on  Sat Apr 16 12:49:58 2016 Arch Kureuil
-## Last update Sun Apr 17 11:57:38 2016 Arch Kureuil
+## Last update Mon Apr 25 15:40:57 2016 Arch Kureuil
 ##
 
 TYPE		= "addin"
@@ -18,6 +18,9 @@ SRCS		= src/main.c \
 
 VENDOR		= ../
 
-DEPS		= lib/liberror.a
+DEPS		= lib/liberror.a \
+		lib/libvector.a
+
+LIBS		= lib/libvector.a
 
 CFLAGS		+= -I ../../inc/
