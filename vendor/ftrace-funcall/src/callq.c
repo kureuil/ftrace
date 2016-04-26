@@ -5,7 +5,7 @@
 ** Login   <kureuil@epitech.net>
 ** 
 ** Started on  Sun Apr 17 11:55:54 2016 Arch Kureuil
-** Last update Mon Apr 25 18:39:59 2016 Arch Kureuil
+** Last update Tue Apr 26 08:48:49 2016 Arch Kureuil
 */
 
 #include <assert.h>
@@ -214,21 +214,22 @@ ftrace_funcall_symbols_init(const struct s_ftrace_opts *opts)
 static int
 ftrace_funcall_symbol_get_by_addr(uintptr_t addr,
 				  const struct s_vector *symbols,
-				  char **namep)
+				  char *name)
 {
   struct s_ftrace_elf_symbol	symbol;
   size_t			i;
 
   assert(addr != 0);
   assert(symbols != NULL);
-  assert(namep != NULL);
+  assert(name != NULL);
   i = 0;
   while (i < symbols->size)
     {
       vector_get(symbols, i, &symbol);
       if (addr == symbol.address)
 	{
-	  *namep = &symbol.name[0];
+	  strncpy(name, symbol.name, FTRACE_SYMBOL_MAX_LENGTH - 1);
+	  name[FTRACE_SYMBOL_MAX_LENGTH - 1] = '\0';
 	  return (0);
 	}
       i++;
@@ -242,7 +243,7 @@ ftrace_funcall_handler_callq(unsigned long long int value,
 			     const struct s_ftrace_opts *opts)
 {
   unsigned long long int	addr;
-  char				*symbol_name;
+  char				symbol_name[FTRACE_SYMBOL_MAX_LENGTH];
 
   assert(regs != NULL);
   assert(opts != NULL);
@@ -250,7 +251,7 @@ ftrace_funcall_handler_callq(unsigned long long int value,
     return (-1);
   ftrace_event_trigger("ftrace:printline-begin", NULL);
   addr = (value >> 8 & 0xffffffff) + regs->rip + 5;
-  if (ftrace_funcall_symbol_get_by_addr(addr, g_symbols, &symbol_name))
+  if (ftrace_funcall_symbol_get_by_addr(addr, g_symbols, symbol_name))
     {
       fprintf(stderr, "Callq %#llx at %#llx\n", value, addr);
     }
