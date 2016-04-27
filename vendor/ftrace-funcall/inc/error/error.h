@@ -5,7 +5,7 @@
 ** Login   <kureuil@epitech.net>
 ** 
 ** Started on  Sat Apr 16 17:09:29 2016 Arch Kureuil
-** Last update Mon Apr 25 17:39:36 2016 Arch Kureuil
+** Last update Mon Apr 18 12:10:32 2016 Arch Kureuil
 */
 
 #ifndef ERROR_H_
