@@ -5,7 +5,7 @@
 ** Login   <kureuil@epitech.net>
 ** 
 ** Started on  Thu Apr 14 13:47:43 2016 Arch Kureuil
-** Last update Sat Apr 16 17:48:34 2016 Arch Kureuil
+** Last update Wed Apr 27 11:17:08 2016 Arch Kureuil
 */
 
 #include <sys/types.h>
@@ -26,14 +26,14 @@ ftrace_addins_locate(char *buf, size_t bufsize)
   pid_t		curpid;
   ssize_t	linked;
   char		*last;
-  char		path[17];
+  char		path[32];
   char		exepath[PATH_MAX];
 
   assert(buf != NULL);
   assert(bufsize != 0);
   curpid = getpid();
   memset(path, 0, sizeof(path));
-  if (snprintf(path, sizeof(path), "/proc/%hu/exe", curpid) == -1)
+  if (snprintf(path, sizeof(path), "/proc/%d/exe", curpid) == -1)
     return (error_raise_errno(), -1);
   linked = readlink(path, exepath, sizeof(exepath) - 1);
   if (linked == -1)
