@@ -5,7 +5,7 @@
 ** Login   <kureuil@epitech.net>
 ** 
 ** Started on  Tue Apr 12 09:42:43 2016 Arch Kureuil
-** Last update Sun Apr 17 11:17:29 2016 Arch Kureuil
+** Last update Wed Apr 27 10:13:47 2016 
 */
 
 #include <sys/ptrace.h>
@@ -15,25 +15,6 @@
 #include "vector/vector.h"
 #include "ftrace.h"
 
-/*
-static const struct s_ftrace_handler g_handlers[] = {
-  {
-    .bitmask = FTRACE_CALLQ_BITMASK,
-    .instruction = FTRACE_CALLQ_INSTRUCTION,
-    .callback = &ftrace_handler_callq,
-  },
-  {
-    .bitmask = FTRACE_RETQ_BITMASK,
-    .instruction = FTRACE_RETQ_INSTRUCTION,
-    .callback = &ftrace_handler_retq,
-  },
-  {
-    .bitmask = 0ull,
-    .instruction = 0ull,
-    .callback = NULL,
-  },
-};
-*/
 static struct s_vector g_handlers;
 
 static int
